@@ -24,7 +24,8 @@ namespace Shift.WinService
             if (jobServer == null)
             {
                 var config = new Shift.ServerConfig();
-                config.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"];
+                config.AssemblyFolder = ConfigurationManager.AppSettings["AssemblyFolder"];
+                //config.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"];
                 config.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]);
                 config.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
                 config.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
@@ -32,8 +33,8 @@ namespace Shift.WinService
                 config.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"];
                 config.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"];
 
-                //config.ServerTimerInterval = 5000; //optional: default every 5 sec for getting jobs ready to run and run them
-                //config.ServerTimerInterval2 = 10000; //optional: default every 10 sec for server CleanUp()
+                config.ServerTimerInterval = Convert.ToInt32(ConfigurationManager.AppSettings["TimerInterval"]); //optional: default every 5 sec for getting jobs ready to run and run them
+                config.ServerTimerInterval2 = Convert.ToInt32(ConfigurationManager.AppSettings["CleanUpTimerInterval"]); //optional: default every 10 sec for server CleanUp()
 
                 jobServer = new Shift.JobServer(config);
             }
