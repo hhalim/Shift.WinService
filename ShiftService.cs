@@ -29,16 +29,22 @@ namespace Shift.WinService
                 config.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]);
                 config.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
                 config.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
-                config.UseCache = Convert.ToBoolean(ConfigurationManager.AppSettings["UseCache"]);
-                config.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"];
-                config.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"];
+
+                config.StorageMode = ConfigurationManager.AppSettings["StorageMode"];
+                var progressDBInterval = ConfigurationManager.AppSettings["ProgressDBInterval"];
+                if (!string.IsNullOrWhiteSpace(progressDBInterval))
+                    config.ProgressDBInterval = TimeSpan.Parse(progressDBInterval); //Interval when progress is updated in main DB
 
                 config.ServerTimerInterval = Convert.ToInt32(ConfigurationManager.AppSettings["TimerInterval"]); //optional: default every 5 sec for getting jobs ready to run and run them
                 config.ServerTimerInterval2 = Convert.ToInt32(ConfigurationManager.AppSettings["CleanUpTimerInterval"]); //optional: default every 10 sec for server CleanUp()
 
                 var autoDeletePeriod = ConfigurationManager.AppSettings["AutoDeletePeriod"];
                 config.AutoDeletePeriod = string.IsNullOrWhiteSpace(autoDeletePeriod) ? null : (int?)Convert.ToInt32(autoDeletePeriod);
+
                 //config.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed, JobStatus.Error }; //Auto delete only the jobs that had Stopped or with Error
+                //config.UseCache = Convert.ToBoolean(ConfigurationManager.AppSettings["UseCache"]);
+                //config.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"];
+                //config.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"];
 
                 jobServer = new Shift.JobServer(config);
             }
@@ -94,7 +100,6 @@ namespace Shift.WinService
             try
             {
                 jobServer.StopJobs();
-                jobServer.StopDeleteJobs();
                 jobServer.RunJobs();
 
                 jobServer.CleanUp();
