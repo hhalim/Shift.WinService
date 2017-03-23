@@ -30,6 +30,9 @@ namespace Shift.WinService
                 config.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
                 config.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
 
+                var threadMode = ConfigurationManager.AppSettings["ThreadMode"];
+                config.ThreadMode = string.IsNullOrWhiteSpace(threadMode) ? null : threadMode;
+
                 config.StorageMode = ConfigurationManager.AppSettings["StorageMode"];
                 var progressDBInterval = ConfigurationManager.AppSettings["ProgressDBInterval"];
                 if (!string.IsNullOrWhiteSpace(progressDBInterval))
