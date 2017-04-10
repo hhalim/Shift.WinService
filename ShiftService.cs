@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace Shift.WinService
@@ -55,21 +56,21 @@ namespace Shift.WinService
             this.ServiceName = appServiceName;
         }
 
-        protected override void OnStart(string[] args)
+        protected async override void OnStart(string[] args)
         {
             if (Array.Find<string>(args, s=> s == "-debug") == "-debug")
             {
-                StartWithNoTimer();
+                await StartWithNoTimer();
             }
             else
             {
-                StartWithTimer();
+                await StartWithTimer();
             }
         }
 
         protected override void OnStop()
         {
-            jobServer.StopServer();
+            jobServer.StopServerAsync().GetAwaiter().GetResult(); //Run synchronously or it will exit before marking running jobs with 'STOP' command!!!
         }
 
         //This is for debugging OnStart and OnStop as Console App
@@ -80,11 +81,11 @@ namespace Shift.WinService
             this.OnStop();
         }
 
-        protected void StartWithTimer()
+        protected async Task StartWithTimer()
         {
             try
             {
-                jobServer.RunServer();
+                await jobServer.RunServerAsync();
             }
             catch (Exception ex)
             {
@@ -98,14 +99,14 @@ namespace Shift.WinService
         }
 
         //FOR DEBUGGING ONLY
-        protected void StartWithNoTimer()
+        protected async Task StartWithNoTimer()
         {
             try
             {
-                jobServer.StopJobs();
-                jobServer.RunJobs();
+                await jobServer.StopJobsAsync();
+                await jobServer.RunJobsAsync();
 
-                jobServer.CleanUp();
+                await jobServer.CleanUpAsync();
             }
             catch (Exception ex)
             {
