@@ -10,4 +10,9 @@ To setup this app:
 - Run `Shift.WinService.exe -install` command to install the windows service. Use `-uninstall` to uninstall the service.
 - Open Windows Services management console, locate the service based on the `ServiceName` in App.config. Start the service.
 
-To send jobs to the Shift Windows service server, use the [Shift.Demo.Client](https://github.com/hhalim/Shift.Demo.Client) console app.
+You can use the [Shift.Demo.Client](https://github.com/hhalim/Shift.Demo.Client) console app to send jobs to the Shift Windows service server.
+
+## Stopping Windows Service
+Please note that stopping the windows service is similar to pushing the off power switch, which means that all running jobs will be stuck in **running** status without actually running in the server. The zombie jobs status will change into an **error** status when the original windows service process runs again.
+
+My recommendation is to send **STOP** command to all the running jobs and also wait for jobs without cancelation handle to complete successfully first before turning off the windows service process.  
