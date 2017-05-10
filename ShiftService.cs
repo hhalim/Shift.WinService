@@ -28,6 +28,7 @@ namespace Shift.WinService
                 config.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]);
                 config.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
                 config.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
+                config.DBAuthKey = ConfigurationManager.AppSettings["DocumentDBAuthKey"];
                 config.Workers = Convert.ToInt32(ConfigurationManager.AppSettings["ShiftWorkers"]);
 
                 config.StorageMode = ConfigurationManager.AppSettings["StorageMode"];
