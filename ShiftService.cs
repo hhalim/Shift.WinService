@@ -17,16 +17,12 @@ namespace Shift.WinService
         {
             InitializeComponent();
             var appServiceName = ConfigurationManager.AppSettings["ServiceName"];
-            var processID = ConfigurationManager.AppSettings["ShiftPID"];
-
-            if (string.IsNullOrWhiteSpace(processID))
-                throw new IndexOutOfRangeException("Configuration for ShiftPID is missing or invalid.");
 
             if (jobServer == null)
             {
                 var config = new Shift.ServerConfig();
                 config.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]);
-                config.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
+                //config.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
                 config.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
                 config.DBAuthKey = ConfigurationManager.AppSettings["DocumentDBAuthKey"];
                 config.Workers = Convert.ToInt32(ConfigurationManager.AppSettings["ShiftWorkers"]);

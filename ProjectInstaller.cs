@@ -34,12 +34,8 @@ namespace ShiftWinService
             var service = Assembly.GetAssembly(typeof(ProjectInstaller));
             var config = ConfigurationManager.OpenExeConfiguration(service.Location);
             var serviceName = config.AppSettings.Settings["ServiceName"].Value;
-            var processID = config.AppSettings.Settings["ShiftPID"].Value;
             if (string.IsNullOrWhiteSpace(serviceName))
                 throw new IndexOutOfRangeException("Configuration for ServiceName is missing or invalid.");
-
-            if (string.IsNullOrWhiteSpace(processID))
-                throw new IndexOutOfRangeException("Configuration for ShiftPID is missing or invalid.");
 
             return serviceName;
         }
